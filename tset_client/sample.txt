@@ -1,0 +1,1 @@
+On other platforms, there might not be a trusted entropy source available or OpenSSL might have been explicitly configured to use different entropy sources 

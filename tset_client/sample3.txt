@@ -1,0 +1,1 @@
+Bob might suggest to make the details of the Enc and Dec algorithms secret. This is how cryptography was done throughout most of the last 2000 years. 
