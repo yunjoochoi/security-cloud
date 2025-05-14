@@ -2,4 +2,4 @@
 2: Diffie, Hellman, Implementation, Lattice, Crypto, NTRU, Group, Key, Exchange, PQC
 3: Crypto, Implementation, Protocol, Bent, Isometric, Automorphism, The, Rayleigh, Quotient
 4: Implementation, Internet, Voting, Blockchain, Receipt, Freeness, Commitment, zkSNARK
-5: University, Gachon, Task, Final
+5: University, Term, Task, Final
