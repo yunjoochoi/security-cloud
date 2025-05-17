@@ -35,8 +35,8 @@ typedef std::pair<std::bitset<80>, std::bitset<129>> MyPair;
 
 #pragma pack(push,1)
 typedef struct Packet {
-    std::vector<uint8_t> header; // 10¹ÙÀÌÆ®
-    std::vector<uint8_t> payload; // 1024 ¹ÙÀÌÆ®
+    std::vector<uint8_t> header; // 10ë°”ì´íŠ¸
+    std::vector<uint8_t> payload; // 1024 ë°”ì´íŠ¸
 }Packet;
 #pragma pack(pop)
 
@@ -66,7 +66,7 @@ void login_client() {
     MYSQL_BIND bind_param[1];
     memset(bind_param, 0, sizeof(bind_param));
 
-    char name[20] = "Alice"; // Å¬¶óÀÌ¾ğÆ® ÀÌ¸§
+    char name[20] = "Alice"; // í´ë¼ì´ì–¸íŠ¸ ì´ë¦„
     bind_param[0].buffer_type = MYSQL_TYPE_VAR_STRING;
     bind_param[0].buffer = name;
     bind_param[0].buffer_length = strlen(name);
@@ -85,12 +85,12 @@ void receive_file(tcp::socket& socket, vector<uc>& data) {
     vector<uc> buffer;
     buffer.reserve(8000);
     for (int i = 0; i < data.size(); i++)
-        buffer.push_back(data[i]); // main¿¡¼­ ¹ŞÀº ÆäÀÌ·Îµå ÀúÀå
+        buffer.push_back(data[i]); // mainì—ì„œ ë°›ì€ í˜ì´ë¡œë“œ ì €ì¥
 
     while (true) {
         boost::system::error_code error;
 
-        string serializedPacket; //ÃÖ´ëÆäÀÌ·Îµå 1024¹ÙÀÌÆ®,Çì´õ10¹ÙÀÌÆ®
+        string serializedPacket; //ìµœëŒ€í˜ì´ë¡œë“œ 1024ë°”ì´íŠ¸,í—¤ë”10ë°”ì´íŠ¸
         serializedPacket.resize(2048);
         size_t response_length = socket.read_some(asio::buffer(serializedPacket), error);
         std::cout << "response_length: " << response_length << std::endl;
@@ -112,7 +112,7 @@ void receive_file(tcp::socket& socket, vector<uc>& data) {
         Packet receivedPacket;
         ia >> receivedPacket;
 
-        // Çì´õ °Ë»ç
+        // í—¤ë” ê²€ì‚¬
         if (is_new_packet == 1) {
             vector<uint8_t> header = receivedPacket.header;
             payload_len= static_cast<int>(receivedPacket.header[0]) * 16 * 16 + static_cast<int>(receivedPacket.header[1]) * 16 + static_cast<int>(receivedPacket.header[2]);
@@ -128,25 +128,25 @@ void receive_file(tcp::socket& socket, vector<uc>& data) {
             is_new_packet = 1;
         }
         if (receivedPacket.header[5] == 7) {
-            break; //Á¾·á¾Ë¸²
+            break; //ì¢…ë£Œì•Œë¦¼
         }
         // Output debug information
         std::cout << "Header size: " << receivedPacket.header.size() << std::endl;
         std::cout << "Payload size: " << receivedPacket.payload.size() << std::endl;
-        std::cout << "¸®½ÃºêµåÆĞÅ¶: ";
+        std::cout << "ë¦¬ì‹œë¸Œë“œíŒ¨í‚·: ";
 
         for (int i = 0; i < receivedPacket.payload.size(); i++) {
             buffer.push_back(receivedPacket.payload.at(i));
             printf("%02x", receivedPacket.payload[i]);
         }
     }
-    printf("¹öÆÛ::");
-    cout << "¹öÆÛ»çÀÌÁî:" << buffer.size() << endl;
+    printf("ë²„í¼::");
+    cout << "ë²„í¼ì‚¬ì´ì¦ˆ:" << buffer.size() << endl;
     for (int i = 0; i < buffer.size(); i++) {
         printf("%02x", buffer[i]);
     }
     printf("\n");
-    //¹öÆÛ¿¡ ÆÄÀÏ³»¿ë ¸ğµÎ ¾¸->µğºñ ÀúÀå
+    //ë²„í¼ì— íŒŒì¼ë‚´ìš© ëª¨ë‘ ì”€->ë””ë¹„ ì €ì¥
     MYSQL* mysql = mysql_init(NULL);
     if (mysql == NULL) {
         fprintf(stderr, "mysql_init() failed\n");
@@ -179,7 +179,7 @@ void receive_file(tcp::socket& socket, vector<uc>& data) {
     bind_param[0].is_null = 0;
 
 
-    //³¯Â¥ÀúÀå
+    //ë‚ ì§œì €ì¥
     MYSQL_TIME mysql_date;
     mysql_date.year = t->tm_year + 1900;  // Set the year
     mysql_date.month = t->tm_mon + 1;   // Set the month
@@ -188,7 +188,7 @@ void receive_file(tcp::socket& socket, vector<uc>& data) {
     bind_param[1].buffer = &mysql_date;
     bind_param[1].is_null = 0;
 
-    int id = 1; // Å¬¶óÀÌ¾ğÆ® ³Ñ¹ö
+    int id = 1; // í´ë¼ì´ì–¸íŠ¸ ë„˜ë²„
     bind_param[2].buffer_type = MYSQL_TYPE_LONG;
     bind_param[2].buffer = &id;
     bind_param[2].is_unsigned = 1;
@@ -208,17 +208,17 @@ void receive_Tset(tcp::socket& socket, vector<uc>& data) {
     
     vector<uc> temp;
     temp.reserve(400000);
-    temp.insert(temp.end(), data.begin(), data.end());  // main¿¡¼­ ¹ŞÀº ÆäÀÌ·Îµå ÀúÀå
+    temp.insert(temp.end(), data.begin(), data.end());  // mainì—ì„œ ë°›ì€ í˜ì´ë¡œë“œ ì €ì¥
     std::cout << "tempsize:" << temp.size() << endl;
     while (true) {
         boost::system::error_code error;
-        string serializedPacket; //ÃÖ´ëÆäÀÌ·Îµå 1024¹ÙÀÌÆ®,Çì´õ10¹ÙÀÌÆ®
-        serializedPacket.resize(2048); //¹Ş´Â¹öÆÛ 2048- ¼öÁ¤ÇØ¾ßÇÒ¼öµµ
+        string serializedPacket; //ìµœëŒ€í˜ì´ë¡œë“œ 1024ë°”ì´íŠ¸,í—¤ë”10ë°”ì´íŠ¸
+        serializedPacket.resize(2048); //ë°›ëŠ”ë²„í¼ 2048- ìˆ˜ì •í•´ì•¼í• ìˆ˜ë„
         size_t response_length = socket.read_some(asio::buffer(serializedPacket), error);
         std::cout << "response_length: " << response_length << std::endl;
         if (error == boost::asio::error::eof) {
             std::cout << "Client closed the connection." << std::endl;
-            socket.close(); // ¼öÁ¤ÇØ¾ßÇÔ ¸®Æ®¶óÀÌºêÄõ¸® ´Ù ¿Ï¼ºÇÏ¸é
+            socket.close(); // ìˆ˜ì •í•´ì•¼í•¨ ë¦¬íŠ¸ë¼ì´ë¸Œì¿¼ë¦¬ ë‹¤ ì™„ì„±í•˜ë©´
             break; // Exit the loop on client disconnect
         }
         else if (error) {
@@ -232,7 +232,7 @@ void receive_Tset(tcp::socket& socket, vector<uc>& data) {
         boost::archive::binary_iarchive ia(is);
         Packet receivedPacket;
         ia >> receivedPacket;
-        // Çì´õ °Ë»ç
+        // í—¤ë” ê²€ì‚¬
         if (is_new_packet == 1) {
             vector<uint8_t> header = receivedPacket.header;
             payload_len = static_cast<int>(receivedPacket.header[0]) * 16 * 16 + static_cast<int>(receivedPacket.header[1]) * 16 + static_cast<int>(receivedPacket.header[2]);
@@ -248,7 +248,7 @@ void receive_Tset(tcp::socket& socket, vector<uc>& data) {
             is_new_packet = 1;
         }
         if (receivedPacket.header[5] == 7) {
-            //Àü¼Û¿Ï·áµÊ
+            //ì „ì†¡ì™„ë£Œë¨
             break;
         }
         // Output debug information
@@ -258,7 +258,7 @@ void receive_Tset(tcp::socket& socket, vector<uc>& data) {
 
     }
     cout << "temp.size()" << temp.size() << endl;
-    MyPair** received_Tset; //Æ¼¼Â Æ÷ÀÎÅÍ
+    MyPair** received_Tset; //í‹°ì…‹ í¬ì¸í„°
     received_Tset = new MyPair * [128];
     for (int i = 0; i < 128; i++) {
         received_Tset[i] = new MyPair[128];
@@ -272,7 +272,7 @@ void receive_Tset(tcp::socket& socket, vector<uc>& data) {
         }
     }
 
-    //// ¿ªÁ÷·ÄÈ­µÈ µ¥ÀÌÅÍ¸¦ ÆÄÀÏ¿¡ ÀúÀå
+    //// ì—­ì§ë ¬í™”ëœ ë°ì´í„°ë¥¼ íŒŒì¼ì— ì €ì¥
     //std::ofstream ofs("received_Tset.bin", std::ios::binary);
     //for (int i = 0; i < 128; ++i) {
     //    for (int j = 0; j < 128; ++j) {
@@ -280,7 +280,7 @@ void receive_Tset(tcp::socket& socket, vector<uc>& data) {
     //    }
     //}
     //ofs.close();
-    // ¿ªÁ÷·ÄÈ­µÈ µ¥ÀÌÅÍ¸¦ µğºñ¿¡ ÀúÀå
+    // ì—­ì§ë ¬í™”ëœ ë°ì´í„°ë¥¼ ë””ë¹„ì— ì €ì¥
     MYSQL* mysql = mysql_init(NULL);
     if (mysql == NULL) {
         fprintf(stderr, "mysql_init() failed\n");
@@ -330,8 +330,8 @@ void receive_Tset(tcp::socket& socket, vector<uc>& data) {
     mysql_close(mysql);
 
 
-    // ¿ªÁ÷·ÄÈ­µÈ µ¥ÀÌÅÍ È®ÀÎ ¹× Ãâ·Â
-    cout << "¿ªÁ÷·ÄÈ­ ÈÄ:" << endl;
+    // ì—­ì§ë ¬í™”ëœ ë°ì´í„° í™•ì¸ ë° ì¶œë ¥
+    cout << "ì—­ì§ë ¬í™” í›„:" << endl;
     for (int i = 15; i < 65; ++i) {
         for (int j = 15; j < 64; ++j) {
             std::cout << "reTset[" << i << "][" << j << "].first: " << received_Tset[i][j].first.to_string() << std::endl;
@@ -339,7 +339,7 @@ void receive_Tset(tcp::socket& socket, vector<uc>& data) {
         }
     }
 
-    // ¸Ş¸ğ¸® ÇØÁö
+    // ë©”ëª¨ë¦¬ í•´ì§€
     for (int i = 0; i < 128; ++i) {
         delete[] received_Tset[i];
     }
@@ -350,7 +350,7 @@ vector<uc> TsetRetrieve(MyPair** Tset, uc* stag) {
     vector<uc> V;
     int betta=1;
     uc i = 1;
-    int terminate_iter = 0;  //ÇØ´ç Å°¿öµå ¾øÀ¸¸é »¡¸® ·çÇÁ ºüÁ®³ª¿À±â À§ÇÔ
+    int terminate_iter = 0;  //í•´ë‹¹ í‚¤ì›Œë“œ ì—†ìœ¼ë©´ ë¹¨ë¦¬ ë£¨í”„ ë¹ ì ¸ë‚˜ì˜¤ê¸° ìœ„í•¨
     while (betta == 1) {
         
         terminate_iter++;
@@ -358,7 +358,7 @@ vector<uc> TsetRetrieve(MyPair** Tset, uc* stag) {
         uc hash_input[16] = { 0 };
         for (int k = 0; k < 16; k++) {
             if (k == 0)
-                iter_i[k] = i; //ÇÑ Å°¿öµå¿¡ 255°³ÀÇ idµéÀÖÀ»¼öÀÖÀ½ ±×ÀÌ»óÀº¾ÈµÊ(¿Ö³Ä¸é uc·Î id Á¤ÀÇÇØ¼­, ppt»óok)
+                iter_i[k] = i; //í•œ í‚¤ì›Œë“œì— 255ê°œì˜ idë“¤ìˆì„ìˆ˜ìˆìŒ ê·¸ì´ìƒì€ì•ˆë¨(ì™œëƒë©´ ucë¡œ id ì •ì˜í•´ì„œ, pptìƒok)
             else
                 iter_i[k] = 0;
         }
@@ -373,10 +373,10 @@ vector<uc> TsetRetrieve(MyPair** Tset, uc* stag) {
         for (int i = 0; i < 16; i++) {
             printf("%02x", hash_input[i]);
         }
-        printf("\n");  //hash_input Ãâ·Â
+        printf("\n");  //hash_input ì¶œë ¥
         EVP_CIPHER_CTX_free(aes_ctx);
 
-        // ¾ÏÈ£È­µÈ °ªÀ» hash ÇÔ¼ö·Î ¸ÅÇÎ
+        // ì•”í˜¸í™”ëœ ê°’ì„ hash í•¨ìˆ˜ë¡œ ë§¤í•‘
         unsigned char digest[SHA256_DIGEST_LENGTH] = { 0 };
         OpenSSL_add_all_digests(); // Initialize all available digest algorithms
         EVP_MD_CTX* mdctx = EVP_MD_CTX_new();
@@ -388,24 +388,24 @@ vector<uc> TsetRetrieve(MyPair** Tset, uc* stag) {
         for (int i = 0; i < 32; i++) {
             printf("%02x", digest[i]);
         }
-        printf("\n");  //digest Ãâ·Â(b||L||K ·Î ³ª´­°ª)
-        // b||L||K ·Î ³ª´©±â (7bits, 80, 129)
+        printf("\n");  //digest ì¶œë ¥(b||L||K ë¡œ ë‚˜ëˆŒê°’)
+        // b||L||K ë¡œ ë‚˜ëˆ„ê¸° (7bits, 80, 129)
         std::bitset<7> b(digest[0] >> 1);
 
         std::bitset<88> temp_L;
         for (int i = 0; i < 11; ++i) {
-            temp_L <<= 8; // temp_LÀÇ  ¸ğµç ºñÆ®¸¦ ¿ŞÂÊÀ¸·Î 8¸¸Å­ ÀÌµ¿
-            temp_L |= std::bitset<88>(digest[i]); // or ¿¬»ê ÈÄ ÇÒ´ç Áï, ºÙ¿©³Ö±â
+            temp_L <<= 8; // temp_Lì˜  ëª¨ë“  ë¹„íŠ¸ë¥¼ ì™¼ìª½ìœ¼ë¡œ 8ë§Œí¼ ì´ë™
+            temp_L |= std::bitset<88>(digest[i]); // or ì—°ì‚° í›„ í• ë‹¹ ì¦‰, ë¶™ì—¬ë„£ê¸°
         }
         std::bitset<80> L(temp_L.to_string().substr(7, 80));
 
         std::bitset<216> temp_K;
         for (int i = 0; i < 27; ++i) {
-            temp_K <<= 8; // temp_KÀÇ  ¸ğµç ºñÆ®¸¦ ¿ŞÂÊÀ¸·Î 8¸¸Å­ ÀÌµ¿
-            temp_K |= std::bitset<216>(digest[i]); // or ¿¬»ê ÈÄ ÇÒ´ç Áï, ºÙ¿©³Ö±â
+            temp_K <<= 8; // temp_Kì˜  ëª¨ë“  ë¹„íŠ¸ë¥¼ ì™¼ìª½ìœ¼ë¡œ 8ë§Œí¼ ì´ë™
+            temp_K |= std::bitset<216>(digest[i]); // or ì—°ì‚° í›„ í• ë‹¹ ì¦‰, ë¶™ì—¬ë„£ê¸°
         }
         std::bitset<129> K(temp_K.to_string().substr(87, 129));
-        // È®ÀÎ Ãâ·Â
+        // í™•ì¸ ì¶œë ¥
         cout << "b:" << b << endl;
         cout << "L:" << L << endl;
         cout << "K:" << K << endl;
@@ -417,7 +417,7 @@ vector<uc> TsetRetrieve(MyPair** Tset, uc* stag) {
         cout << "b_decimal: " << std::dec << b_decimal << endl; 
 
         terminate_iter = 0;
-        for (int j = 1; j <= 128; j++) { // JÀÓ Çò°¥¸®Áö¸»±â
+        for (int j = 1; j <= 128; j++) { // Jì„ í—·ê°ˆë¦¬ì§€ë§ê¸°
             cout << "Searching... Tset["<<b_decimal<<"]["<<j<<"].first" << Tset[b_decimal][j].first.to_string() << endl;
             if (Tset[b_decimal][j].first == L) {
                 std::bitset<129> v_= Tset[b_decimal][j].second^K;
@@ -438,7 +438,7 @@ vector<uc> TsetRetrieve(MyPair** Tset, uc* stag) {
         if (terminate_iter == 128) {
             cout << "no such keyword" << endl;
             V.push_back(1);
-            return V; // 1°³ ÀÓÀÇÀÇ µ¥ÀÌÅÍ¸¸ ÀÖ´Â º¤ÅÍ - Á¸ÀçÇÏÁö¾Ê´ÂÅ°¿öµå¶õ °ÍÀ» Àü¼Û À§ÇÔ(ÆÄÀÏÇÏ³ª¶óµµÀÖÀ¸¸é¿ø¼Ò16°³ÀÓ)
+            return V; // 1ê°œ ì„ì˜ì˜ ë°ì´í„°ë§Œ ìˆëŠ” ë²¡í„° - ì¡´ì¬í•˜ì§€ì•ŠëŠ”í‚¤ì›Œë“œë€ ê²ƒì„ ì „ì†¡ ìœ„í•¨(íŒŒì¼í•˜ë‚˜ë¼ë„ìˆìœ¼ë©´ì›ì†Œ16ê°œì„)
         }
         i += 1;
     }
@@ -448,13 +448,13 @@ vector<uc> TsetRetrieve(MyPair** Tset, uc* stag) {
 void Answer_keyword(tcp::socket& socket, uc* stag) {
     cout << "in Answer_keyword func" << endl;
 
-    MyPair** received_Tset; //Æ¼¼Â Æ÷ÀÎÅÍ ¼±¾ğ
+    MyPair** received_Tset; //í‹°ì…‹ í¬ì¸í„° ì„ ì–¸
     received_Tset = new MyPair * [128];
     for (int i = 0; i < 128; i++) {
         received_Tset[i] = new MyPair[128];
     }
 
-    //µğºñ¿¡¼­ Æ¼¼ÂºÒ·¯¿À±â
+    //ë””ë¹„ì—ì„œ í‹°ì…‹ë¶ˆëŸ¬ì˜¤ê¸°
     MYSQL* mysql = mysql_init(NULL);
     if (mysql == NULL) {
         fprintf(stderr, "mysql_init() failed\n");
@@ -464,7 +464,7 @@ void Answer_keyword(tcp::socket& socket, uc* stag) {
         fprintf(stderr, "mysql_real_connect() failed\n");
     }
 
-    const char* select_sql = "SELECT tset FROM client_ WHERE name='Alice'"; //¾Ù¸®½ºÀÇÆ¼¼ÂÀ»°¡Á®¿Í¶ó - ÇÏµåÄÚµù
+    const char* select_sql = "SELECT tset FROM client_ WHERE name='Alice'"; //ì•¨ë¦¬ìŠ¤ì˜í‹°ì…‹ì„ê°€ì ¸ì™€ë¼ - í•˜ë“œì½”ë”©
     MYSQL_STMT* stmt = mysql_stmt_init(mysql);
     if (stmt == NULL) {
         fprintf(stderr, "mysql_stmt_init() failed\n");
@@ -477,7 +477,7 @@ void Answer_keyword(tcp::socket& socket, uc* stag) {
     MYSQL_BIND bind_result;
     memset(&bind_result, 0, sizeof(bind_result));
 
-    std::vector<char> received_binary_data;  // ¹öÆÛ
+    std::vector<char> received_binary_data;  // ë²„í¼
     received_binary_data.resize(128 * 128 * sizeof(MyPair));
 
     bind_result.buffer_type = MYSQL_TYPE_BLOB;
@@ -499,7 +499,7 @@ void Answer_keyword(tcp::socket& socket, uc* stag) {
     mysql_stmt_close(stmt);
 
 
-    // Æ¼¼ÂºÒ·¯¿À±â
+    // í‹°ì…‹ë¶ˆëŸ¬ì˜¤ê¸°
     size_t offset = 0;
     for (int i = 0; i < 128; ++i) {
         for (int j = 0; j < 128; ++j) {
@@ -507,13 +507,13 @@ void Answer_keyword(tcp::socket& socket, uc* stag) {
             offset += sizeof(MyPair);
         }
     }
-    //´İ±â
+    //ë‹«ê¸°
     mysql_close(mysql);
     received_binary_data.clear();
 
-    //Äõ¸®µÈ ÆÄÀÏ¾ÆÀÌµğµé¸¸ ÃßÃâ
+    //ì¿¼ë¦¬ëœ íŒŒì¼ì•„ì´ë””ë“¤ë§Œ ì¶”ì¶œ
     vector<uc> ptr = TsetRetrieve(received_Tset, stag);
-    // ÀÌÁ¦ Æ¼¼Â ¸Ş¸ğ¸® ÇØÁ¦
+    // ì´ì œ í‹°ì…‹ ë©”ëª¨ë¦¬ í•´ì œ
     for (int i = 0; i < 128; i++) {
         delete[] received_Tset[i]; 
     }
@@ -524,11 +524,11 @@ void Answer_keyword(tcp::socket& socket, uc* stag) {
     for (int i = 0; i < ptr.size(); i++) {
         printf("%02x", ptr[i]);
     }
-    //  Å¬¶óÀÌ¾ğÆ®¿¡°Ô ÆĞÅ¶º¸³»±â
+    //  í´ë¼ì´ì–¸íŠ¸ì—ê²Œ íŒ¨í‚·ë³´ë‚´ê¸°
 
-    Packet packet; //ÆĞÅ¶ÃÖ´ëÆäÀÌ·Îµå´Â 1024
-    packet.header.resize(10, 0); // Çì´õÅ©±â¸¸Å­ ÀÏ´Ü ´Ã¸²
-    packet.header[5] = 4; // Å°¿öµå¿¡´ëÇÑ ´äÀÌ¶ó´Â¶æ(¸í·É)
+    Packet packet; //íŒ¨í‚·ìµœëŒ€í˜ì´ë¡œë“œëŠ” 1024
+    packet.header.resize(10, 0); // í—¤ë”í¬ê¸°ë§Œí¼ ì¼ë‹¨ ëŠ˜ë¦¼
+    packet.header[5] = 4; // í‚¤ì›Œë“œì—ëŒ€í•œ ë‹µì´ë¼ëŠ”ëœ»(ëª…ë ¹)
     packet.header[4] = 1; //(is_new_file)
 
     size_t V_size = ptr.size();
@@ -536,8 +536,8 @@ void Answer_keyword(tcp::socket& socket, uc* stag) {
     size_t index = 0;
     while (V_size > 0) {
         if (V_size == 1) {
-            packet.header[5] = 8;//->¾îÂ¥ÇÇ¾ÏÈ£È­µÈ¾ÆÀÌµğµé16¹è¼öÀÌ°íÆäÀÌ·ÎµåÅ©±âµµ1024¹Ç·Î È¦¼ö1¸¸³²À»ÀÌÀ¯°¡¾øÀ½
-            //Å°¿öµå¿¡´ëÀÀµÇ´ÂÆÄÀÏ¾ÆÀÌµğµé¾ø´Ù´Â¸í·É
+            packet.header[5] = 8;//->ì–´ì§œí”¼ì•”í˜¸í™”ëœì•„ì´ë””ë“¤16ë°°ìˆ˜ì´ê³ í˜ì´ë¡œë“œí¬ê¸°ë„1024ë¯€ë¡œ í™€ìˆ˜1ë§Œë‚¨ì„ì´ìœ ê°€ì—†ìŒ
+            //í‚¤ì›Œë“œì—ëŒ€ì‘ë˜ëŠ”íŒŒì¼ì•„ì´ë””ë“¤ì—†ë‹¤ëŠ”ëª…ë ¹
         }
         size_t payload_size = 0;
         for (int i = 0; i < V_size; i++) {
@@ -559,7 +559,7 @@ void Answer_keyword(tcp::socket& socket, uc* stag) {
             ucArray.push_back(uc);
         }
 
-        packet.header[0] = 0; packet.header[1] = 0; packet.header[2] = 0; //ÆĞÅ¶ ÀçÈ°¿ëÇÏ±â¶§¹®ÀÓ
+        packet.header[0] = 0; packet.header[1] = 0; packet.header[2] = 0; //íŒ¨í‚· ì¬í™œìš©í•˜ê¸°ë•Œë¬¸ì„
         if (H.size() == 1) packet.header[2] = ucArray[0];
         else if (H.size() == 2) {
             packet.header[1] = ucArray[0];
@@ -587,16 +587,16 @@ void Answer_keyword(tcp::socket& socket, uc* stag) {
         std::cout << "Payload size: " << packet.payload.size() << std::endl;
 
 
-        packet.header[4] = 0; //ÀÌÁ¦ ³²Àº µ¥ÀÌÅÍ º¸³»¸é µÊ(is_new_file==0)
+        packet.header[4] = 0; //ì´ì œ ë‚¨ì€ ë°ì´í„° ë³´ë‚´ë©´ ë¨(is_new_file==0)
         Sleep(10);
         packet.payload.clear();
 
     }
-    if (ptr.size() > 1) { // ÆÄÀÏ¾ÆÀÌµğµéÀÌ ÀÖ¾ú´Ù¸é, ´Ù Àü¼ÛÇÏ°í Á¾·áÇÑ´Ù´Â ÆĞÅ¶ º¸³»Áà¾ßÇÔ
-        Packet packet_; //ÆĞÅ¶ÃÖ´ëÆäÀÌ·Îµå´Â 1024
-        packet_.header.resize(10, 0); // Çì´õÅ©±â¸¸Å­ ÀÏ´Ü ´Ã¸²
-        packet_.header[5] = 7; // ¸ğµç ÆÄÀÏÀü¼ÛÇŞÀ¸´Ï ¼ÒÄÏ´İ¾ÆµµµÈ´Ù
-        packet_.header[2] = 1; // ÆäÀÌ·ÎµåÅ©±â:1 ±×³É ÀÓÀÇ¼³Á¤
+    if (ptr.size() > 1) { // íŒŒì¼ì•„ì´ë””ë“¤ì´ ìˆì—ˆë‹¤ë©´, ë‹¤ ì „ì†¡í•˜ê³  ì¢…ë£Œí•œë‹¤ëŠ” íŒ¨í‚· ë³´ë‚´ì¤˜ì•¼í•¨
+        Packet packet_; //íŒ¨í‚·ìµœëŒ€í˜ì´ë¡œë“œëŠ” 1024
+        packet_.header.resize(10, 0); // í—¤ë”í¬ê¸°ë§Œí¼ ì¼ë‹¨ ëŠ˜ë¦¼
+        packet_.header[5] = 7; // ëª¨ë“  íŒŒì¼ì „ì†¡í–‡ìœ¼ë‹ˆ ì†Œì¼“ë‹«ì•„ë„ëœë‹¤
+        packet_.header[2] = 1; // í˜ì´ë¡œë“œí¬ê¸°:1 ê·¸ëƒ¥ ì„ì˜ì„¤ì •
         packet_.payload.push_back(1);
         // Serialize the Packet
         std::ostringstream oss;
@@ -608,16 +608,16 @@ void Answer_keyword(tcp::socket& socket, uc* stag) {
 }
 void Answer_document(tcp::socket& socket, vector<uc>& data) {
     cout << "in Answer_document func" << endl;
-    // dataµé¿¡´Â º¹È£È­µÈ ÆÄÀÏ¾ÆÀÌµğµé ´ã±è. ¾Æ¸¶ ÆĞÅ¶ÇÏ³ª·Î ´Ù ¿À±â °¡´ÉÇÒ °Í.(ÆÄÀÏÀÌ1024°³´Â¾Æ´ÒÅ×´Ï)
+    // dataë“¤ì—ëŠ” ë³µí˜¸í™”ëœ íŒŒì¼ì•„ì´ë””ë“¤ ë‹´ê¹€. ì•„ë§ˆ íŒ¨í‚·í•˜ë‚˜ë¡œ ë‹¤ ì˜¤ê¸° ê°€ëŠ¥í•  ê²ƒ.(íŒŒì¼ì´1024ê°œëŠ”ì•„ë‹í…Œë‹ˆ)
     std::unordered_set<int> myIDset;
     for (int i = 0; i < data.size(); i++) {
         myIDset.insert((int)data[i]);
     }
-    cout << "myIDsetÈ®ÀÎÃâ·Â";
+    cout << "myIDsetí™•ì¸ì¶œë ¥";
     for (const auto& element : myIDset) {
         std::cout << element <<" ";
     }
-    //DB¿¡ ÆÄÀÏ ÀÎÆ÷¸ŞÀÌ¼Ç ¿äÃ»
+    //DBì— íŒŒì¼ ì¸í¬ë©”ì´ì…˜ ìš”ì²­
     MYSQL* conn = mysql_init(NULL);
 
     if (conn == NULL) {
@@ -630,7 +630,7 @@ void Answer_document(tcp::socket& socket, vector<uc>& data) {
     }
     std::cout << "DB Connection Success" << endl;
     char select_sql[1024];
-    const char* username = "Alice"; //ÇÏµåÄÚµù
+    const char* username = "Alice"; //í•˜ë“œì½”ë”©
     sprintf_s(select_sql, sizeof(select_sql), "SELECT file_.id, file_.contents\nFROM(file_ JOIN client_ ON file_.client_id = client_.id)\nWHERE name = \"%s\"; ", username);
 
     if (mysql_real_query(conn, select_sql, strlen(select_sql)) != 0) {
@@ -640,18 +640,18 @@ void Answer_document(tcp::socket& socket, vector<uc>& data) {
 
     MYSQL_RES* result = mysql_store_result(conn);
     
-    while (MYSQL_ROW row = mysql_fetch_row(result))     // ¸ğµç ÆÄÀÏ Å½»ö ,row:°¢ ¿­ÀÇ µ¥ÀÌÅÍ°¡ ¹®ÀÚ¿­·Î ¹İÈ¯
+    while (MYSQL_ROW row = mysql_fetch_row(result))     // ëª¨ë“  íŒŒì¼ íƒìƒ‰ ,row:ê° ì—´ì˜ ë°ì´í„°ê°€ ë¬¸ìì—´ë¡œ ë°˜í™˜
     {
-        cout << "row ·çÇÁ ÇÑ¹ø µ¼" << endl;
-        if (myIDset.count(atoi(row[0]))) {  //id°¡ ¾ÆÀÌµğ¼Â¾È¿¡ÀÖ´Ù¸é,
-            Packet packet; //ÆĞÅ¶ÃÖ´ëÆäÀÌ·Îµå´Â 1024
-            packet.header.resize(10, 0); // Çì´õÅ©±â¸¸Å­ ÀÏ´Ü ´Ã¸²
-            packet.header[5] = 6; //¾ÏÈ£È­µÈ ÆÄÀÏ Àü¼ÛÇÒÅ×´Ï ¹ŞÀ¸¶ó´Â ¶æ
-            packet.header[4] = 1; //»õ·Î¿î ÆÄÀÏ ¾÷·Îµå´Ï±î ÆÄÀÏ¿­¶ó´ÂÀÇ¹Ì(is_new_file)
+        cout << "row ë£¨í”„ í•œë²ˆ ë”" << endl;
+        if (myIDset.count(atoi(row[0]))) {  //idê°€ ì•„ì´ë””ì…‹ì•ˆì—ìˆë‹¤ë©´,
+            Packet packet; //íŒ¨í‚·ìµœëŒ€í˜ì´ë¡œë“œëŠ” 1024
+            packet.header.resize(10, 0); // í—¤ë”í¬ê¸°ë§Œí¼ ì¼ë‹¨ ëŠ˜ë¦¼
+            packet.header[5] = 6; //ì•”í˜¸í™”ëœ íŒŒì¼ ì „ì†¡í• í…Œë‹ˆ ë°›ìœ¼ë¼ëŠ” ëœ»
+            packet.header[4] = 1; //ìƒˆë¡œìš´ íŒŒì¼ ì—…ë¡œë“œë‹ˆê¹Œ íŒŒì¼ì—´ë¼ëŠ”ì˜ë¯¸(is_new_file)
 
             unsigned char* blob_data = (unsigned char*)row[1];
             unsigned long* lengths = mysql_fetch_lengths(result);
-            size_t blob_size = lengths[1]; // ºí·Ó µ¥ÀÌÅÍ »çÀÌÁî
+            size_t blob_size = lengths[1]; // ë¸”ë¡­ ë°ì´í„° ì‚¬ì´ì¦ˆ
             cout << "blob_size " << blob_size << endl;
             size_t index = 0;
             while (blob_size > 0) {
@@ -675,7 +675,7 @@ void Answer_document(tcp::socket& socket, vector<uc>& data) {
                     ucArray.push_back(uc);
                 }
 
-                packet.header[0] = 0; packet.header[1] = 0; packet.header[2] = 0; //ÆĞÅ¶ ÀçÈ°¿ëÇÏ±â¶§¹®ÀÓ
+                packet.header[0] = 0; packet.header[1] = 0; packet.header[2] = 0; //íŒ¨í‚· ì¬í™œìš©í•˜ê¸°ë•Œë¬¸ì„
                 if (H.size() == 1) packet.header[2] = ucArray[0];
                 else if (H.size() == 2) {
                     packet.header[1] = ucArray[0];
@@ -698,22 +698,22 @@ void Answer_document(tcp::socket& socket, vector<uc>& data) {
 
                 // Send the serialized packet to the server
                 asio::write(socket, asio::buffer(oss.str()));
-                Sleep(1000); //Ã³¸®ÇÏ°í ´Ù½Ã ¹ŞÀ» ¶§ ±îÁö ±â´Ù¸²
+                Sleep(1000); //ì²˜ë¦¬í•˜ê³  ë‹¤ì‹œ ë°›ì„ ë•Œ ê¹Œì§€ ê¸°ë‹¤ë¦¼
 
                 // Output debug information
                 std::cout << "Header size: " << packet.header.size() << std::endl;
                 std::cout << "Payload size: " << packet.payload.size() << std::endl;
 
-                packet.header[4] = 0; //ÀÌÁ¦ ³²Àº µ¥ÀÌÅÍ º¸³»¸é µÊ(is_new_file==0)
+                packet.header[4] = 0; //ì´ì œ ë‚¨ì€ ë°ì´í„° ë³´ë‚´ë©´ ë¨(is_new_file==0)
                 packet.payload.clear();
             }
         }
     }
     mysql_free_result(result);
-    Packet packet; //ÆĞÅ¶ÃÖ´ëÆäÀÌ·Îµå´Â 1024
-    packet.header.resize(10, 0); // Çì´õÅ©±â¸¸Å­ ÀÏ´Ü ´Ã¸²
-    packet.header[5] = 7; // ¸ğµç ÆÄÀÏÀü¼ÛÇŞÀ¸´Ï ¼ÒÄÏ´İ¾ÆµµµÈ´Ù
-    packet.header[2] = 1; // ÆäÀÌ·ÎµåÅ©±â:1 ±×³É ÀÓÀÇ¼³Á¤
+    Packet packet; //íŒ¨í‚·ìµœëŒ€í˜ì´ë¡œë“œëŠ” 1024
+    packet.header.resize(10, 0); // í—¤ë”í¬ê¸°ë§Œí¼ ì¼ë‹¨ ëŠ˜ë¦¼
+    packet.header[5] = 7; // ëª¨ë“  íŒŒì¼ì „ì†¡í–‡ìœ¼ë‹ˆ ì†Œì¼“ë‹«ì•„ë„ëœë‹¤
+    packet.header[2] = 1; // í˜ì´ë¡œë“œí¬ê¸°:1 ê·¸ëƒ¥ ì„ì˜ì„¤ì •
     packet.payload.push_back(1);
     // Serialize the Packet
     std::ostringstream oss;
@@ -743,8 +743,8 @@ int main() {
         while (1) {
 
             boost::system::error_code error;
-            string serializedPacket; // ÃÖ´ë ÆäÀÌ·Îµå 1024¹ÙÀÌÆ®, Çì´õ 10¹ÙÀÌÆ®
-            serializedPacket.resize(2000); // ¹Ş´Â ¹öÆÛ 2048 - ¼öÁ¤ÇØ¾ßÇÒ ¼öµµ
+            string serializedPacket; // ìµœëŒ€ í˜ì´ë¡œë“œ 1024ë°”ì´íŠ¸, í—¤ë” 10ë°”ì´íŠ¸
+            serializedPacket.resize(2000); // ë°›ëŠ” ë²„í¼ 2048 - ìˆ˜ì •í•´ì•¼í•  ìˆ˜ë„
             size_t response_length = socket.read_some(asio::buffer(serializedPacket), error);
             std::cout << "response_length: " << response_length << std::endl;
             if (error == boost::asio::error::eof) {
@@ -764,7 +764,7 @@ int main() {
             Packet receivedPacket;
             ia >> receivedPacket;
 
-            // Çì´õ °Ë»ç
+            // í—¤ë” ê²€ì‚¬
             if (is_new_packet == 1) {
                 vector<uint8_t> header = receivedPacket.header;
                 payload_len = static_cast<int>(receivedPacket.header[0]) * 16 * 16 + static_cast<int>(receivedPacket.header[1]) * 16 + static_cast<int>(receivedPacket.header[2]);
@@ -786,15 +786,15 @@ int main() {
             
 
             // Case
-            if (receivedPacket.header[5] == 2) { // ¸í·ÉÀÌ store docÀÌ¶ó¸é
+            if (receivedPacket.header[5] == 2) { // ëª…ë ¹ì´ store docì´ë¼ë©´
                 receive_file(socket, receivedPacket.payload);
                 //break;
             }
-            if (receivedPacket.header[5] == 1) { // ¸í·ÉÀÌ store EDB¶ó¸é
+            if (receivedPacket.header[5] == 1) { // ëª…ë ¹ì´ store EDBë¼ë©´
                 receive_Tset(socket, receivedPacket.payload);
                 //break;
             }
-            if (receivedPacket.header[5] == 3) { // ¸í·ÉÀÌ Query:keyword¶ó¸é(stag¹Ş´Â°æ¿ì)
+            if (receivedPacket.header[5] == 3) { // ëª…ë ¹ì´ Query:keywordë¼ë©´(stagë°›ëŠ”ê²½ìš°)
                 uc stag[16];
                 for (int i = 0; i < 16; i++)
                     stag[i]=receivedPacket.payload[i];
@@ -802,12 +802,12 @@ int main() {
                 Sleep(1500);
                 //continue;
             }
-            if (receivedPacket.header[5] == 5) {  // ¸í·ÉÀÌ Query:document¶ó¸é(º¹È£È­µÈid¹Ş´Â°æ¿ì)
+            if (receivedPacket.header[5] == 5) {  // ëª…ë ¹ì´ Query:documentë¼ë©´(ë³µí˜¸í™”ëœidë°›ëŠ”ê²½ìš°)
                 Answer_document(socket, receivedPacket.payload);
                 //break;
             }
             if (receivedPacket.header[5] == 7) {
-                cout << "Å¬¶óÀÌ¾ğÆ®Ãø¿¡¼­ ÇØ´ç Å°¿öµå ÆÄÀÏ ¾ø´Ù´Â ½ÅÈ£ ¹Ş±â ¿Ï·á" << endl;
+                cout << "í´ë¼ì´ì–¸íŠ¸ì¸¡ì—ì„œ í•´ë‹¹ í‚¤ì›Œë“œ íŒŒì¼ ì—†ë‹¤ëŠ” ì‹ í˜¸ ë°›ê¸° ì™„ë£Œ" << endl;
             }
 
         }
