@@ -1,7 +1,7 @@
 # Security Cloud
 - Highly-scalable searchable symmetric encryption with support for Boolean queries (2013) Implementation of SSE system using Tset protocol in the paper
 - A protocol for performing query requests without revealing information about the keyword distribution across multiple documents.
-- 2023.09
+- Project carried out in September 2023
 
 ## the packet design
 ![packet design](https://raw.githubusercontent.com/sfsfsefs/images/4689220e36703e75b12338b1b19db14089bc5576/1.png)
